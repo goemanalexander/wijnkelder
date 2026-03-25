@@ -1,0 +1,16 @@
+-----------------------------------------------------------------------------
+
+Dies ist eine automatische Nachricht des BMW Postmasters.
+
+Das Attachment wijnkelder.html enthielt ausfuehrbaren Code und wurde aufgrund der aktuellen Bedrohungslage geloescht!
+Bitte setzen Sie sich gegebenfalls mit dem Absender dieser Mail in Verbindung oder kontaktieren Sie Ihren zustaendigen IT Service Desk.
+
+-----------------------------------------------------------------------------
+
+This is an automatic message from BMW Postmaster.
+
+The attachment wijnkelder.html contained executable code and therefore was deleted due to the current threat sutuation!
+If necessary, please contact the originator of the mail or call your local IT service desk.
+
+-----------------------------------------------------------------------------
+Mail processed by Cluster ESAGW.
