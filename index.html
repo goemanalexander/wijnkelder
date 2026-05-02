@@ -694,9 +694,14 @@
   <div class="section" id="tab-dashboard">
     <div class="dashboard-grid">
       <div class="dash-card">
-        <div class="dash-card-title">Kelderwaarde</div>
+        <div class="dash-card-title">Aankoopwaarde</div>
         <div class="dash-big" id="d-value">–</div>
         <div class="dash-sub" id="d-bottles-sub">–</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-title">Geschatte marktwaarde</div>
+        <div class="dash-big" id="d-market">–</div>
+        <div class="dash-sub" id="d-market-sub">–</div>
       </div>
       <div class="dash-card">
         <div class="dash-card-title">Gem. prijs/fles</div>
@@ -1303,6 +1308,42 @@ function renderDrunk() {
 }
 
 // ═══════════════════════════════════════════════════════
+// MARKTWAARDE SCHATTING
+// ═══════════════════════════════════════════════════════
+function estimateMarketPrice(w) {
+  const app = (w.appellation || '').toLowerCase();
+  const region = (w.region || '').toLowerCase();
+  const name = (w.name || '').toLowerCase();
+  const grape = (w.grape || '').toLowerCase();
+  const vintage = w.vintage || 2020;
+  const age = new Date().getFullYear() - vintage;
+  let range = null;
+
+  if (app.includes('brunello di montalcino')) range = [45, 90];
+  else if (app.includes('barolo') || app.includes('barbaresco')) range = [35, 75];
+  else if (app.includes('amarone')) range = [22, 50];
+  else if (app.includes('châteauneuf') || app.includes('chateauneuf')) range = [25, 55];
+  else if (app.includes('primitivo di manduria')) range = [10, 22];
+  else if ((app.includes('rioja') || name.includes('rioja')) && (app.includes('gran reserva') || name.includes('gran reserva'))) range = [15, 35];
+  else if ((app.includes('rioja') || name.includes('rioja')) && (app.includes('reserva') || name.includes('reserva'))) range = [10, 20];
+  else if (app.includes('ripasso')) range = [12, 25];
+  else if (app.includes('valpolicella')) range = [8, 16];
+  else if (app.includes('chianti classico') && app.includes('gran selezione')) range = [25, 50];
+  else if (app.includes('chianti classico') && app.includes('riserva')) range = [15, 28];
+  else if (app.includes('chianti classico')) range = [10, 18];
+  else if (app.includes('bolgheri')) range = [18, 45];
+  else if (grape.includes('primitivo') || region.includes('puglia')) range = [7, 15];
+  else if (grape.includes('sangiovese') || region.includes('toscane')) range = [8, 18];
+  else if (region.includes('rhône') || region.includes('cévennes')) range = [8, 16];
+  else if (region.includes('spanje') || app.includes('cariñena')) range = [8, 18];
+  else range = [8, 18];
+
+  let mid = (range[0] + range[1]) / 2;
+  const ageFactor = Math.min(1.35, 1 + age * 0.015);
+  return Math.round(mid * ageFactor * 10) / 10;
+}
+
+// ═══════════════════════════════════════════════════════
 // DASHBOARD
 // ═══════════════════════════════════════════════════════
 function renderDashboard() {
@@ -1315,8 +1356,13 @@ function renderDashboard() {
   const avgScore = scored.length ? (scored.reduce((s, w) => s + Number(w.score), 0) / scored.length).toFixed(1) : null;
   const totalDrunk = wines.reduce((s, w) => s + (w.drunk_bottles || 0), 0);
 
-  document.getElementById('d-value').textContent = '€' + totalValue.toFixed(0);
+  const totalMarket = active.reduce((s, w) => s + (w.bottles || 0) * estimateMarketPrice(w), 0);
+  const gain = totalValue > 0 ? ((totalMarket - totalValue) / totalValue * 100).toFixed(0) : null;
+
+  document.getElementById('d-value').textContent = totalValue > 0 ? '€' + totalValue.toFixed(0) : '—';
   document.getElementById('d-bottles-sub').textContent = `${totalBottles} flessen · ${active.length} wijnen`;
+  document.getElementById('d-market').textContent = '€' + totalMarket.toFixed(0);
+  document.getElementById('d-market-sub').textContent = gain ? `±${Number(gain) > 0 ? '+' : ''}${gain}% vs aankoop` : 'Schatting op basis van appellatie';
   document.getElementById('d-avg').textContent = avgPrice ? '€' + avgPrice.toFixed(2) : '—';
   document.getElementById('d-drunk-sub').textContent = `${totalDrunk} fl. gedronken`;
   document.getElementById('d-score').textContent = avgScore || '—';
