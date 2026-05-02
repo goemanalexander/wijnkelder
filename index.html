@@ -561,6 +561,9 @@
 <div class="sync-bar">
   <div class="sync-dot" id="syncDot"></div>
   <span id="syncText">Verbinden...</span>
+  <button onclick="pushToGitHub()" id="githubBtn" style="margin-left:auto;padding:3px 10px;background:none;border:1px solid rgba(201,169,110,0.25);border-radius:3px;color:var(--text-muted);font-size:9px;font-family:'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:all 0.2s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">
+    ↑ Push naar GitHub
+  </button>
 </div>
 
 <div class="container">
@@ -833,8 +836,12 @@
 // ═══════════════════════════════════════════════════════
 const SUPABASE_URL = 'https://ihzbvngfpwlsdyvjesog.supabase.co';
 const SUPABASE_KEY = 'sb_publishable__b-nWvaUArYrT7Xr1ogg3Q_3fAOoIMk';
-const CLAUDE_KEY = null; // Set via prompt if needed — scan uses backend proxy
+const CLAUDE_KEY = null;
 const TABLE = 'wines';
+const GITHUB_REPO = 'goemanalexander/wijnkelder';
+const GITHUB_BRANCH = 'main';
+const GITHUB_FILE = 'index.html';
+function getGithubToken() { return localStorage.getItem('gh_token') || ''; }
 
 // ═══════════════════════════════════════════════════════
 // SUPABASE HELPERS
@@ -1605,6 +1612,57 @@ function showToast(msg) {
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ═══════════════════════════════════════════════════════
+// GITHUB AUTO-DEPLOY
+// ═══════════════════════════════════════════════════════
+async function pushToGitHub() {
+  let token = getGithubToken();
+  if (!token) {
+    token = prompt('Voer je GitHub token in (ghp_...):\nDeze wordt veilig lokaal opgeslagen.');
+    if (!token) return;
+    localStorage.setItem('gh_token', token.trim());
+  }
+
+  const btn = document.getElementById('githubBtn');
+  btn.textContent = '⏳ Bezig…';
+  btn.disabled = true;
+  setSyncStatus('syncing', 'Pushen naar GitHub…');
+
+  try {
+    const getRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${GITHUB_FILE}?ref=${GITHUB_BRANCH}`, {
+      headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json' }
+    });
+    if (!getRes.ok) {
+      localStorage.removeItem('gh_token');
+      throw new Error('Token ongeldig of verlopen');
+    }
+    const fileData = await getRes.json();
+    const sha = fileData.sha;
+    const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+    const encoded = btoa(unescape(encodeURIComponent(html)));
+
+    const pushRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${GITHUB_FILE}`, {
+      method: 'PUT',
+      headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: `🍷 Wijnkelder update — ${new Date().toLocaleString('nl-BE')}`,
+        content: encoded, sha, branch: GITHUB_BRANCH
+      })
+    });
+
+    if (!pushRes.ok) throw new Error('Push mislukt: ' + pushRes.status);
+    setSyncStatus('ok', `GitHub bijgewerkt · ${new Date().toLocaleTimeString('nl-BE')}`);
+    showToast('✓ App succesvol gepushed naar GitHub!');
+  } catch(e) {
+    setSyncStatus('error', 'GitHub push mislukt');
+    showToast('⚠ ' + e.message);
+    console.error(e);
+  } finally {
+    btn.textContent = '↑ Push naar GitHub';
+    btn.disabled = false;
+  }
 }
 
 // ═══════════════════════════════════════════════════════
