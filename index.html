@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="nl">
-<head>
+<html lang="nl"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -10,7 +9,7 @@
 <title>Alexander's Wijnkelder</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&amp;family=Montserrat:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
 <style>
   :root {
     --wine: #8B1A2E;
@@ -537,33 +536,31 @@
   .analyzing-sub { font-size: 12px; color: var(--text-muted); }
   .wine-spinner { font-size: 40px; animation: spin 2s linear infinite; }
 </style>
-</head>
+<meta id="ConnectiveDocSignExtentionInstalled" name="ConnectiveDocSignExtentionInstalled" data-extension-version="1.0.7"></head>
 <body>
 
 <header>
   <div class="logo">Alexander's <span>Wijnkelder</span></div>
   <div class="header-stats">
     <div class="stat">
-      <div class="stat-value" id="totalBottles">–</div>
+      <div class="stat-value" id="totalBottles">28</div>
       <div class="stat-label">Flessen</div>
     </div>
     <div class="stat">
-      <div class="stat-value" id="totalWines">–</div>
+      <div class="stat-value" id="totalWines">8</div>
       <div class="stat-label">Wijnen</div>
     </div>
     <div class="stat">
-      <div class="stat-value" id="totalValue">–</div>
+      <div class="stat-value" id="totalValue">€209</div>
       <div class="stat-label">Waarde</div>
     </div>
   </div>
 </header>
 
 <div class="sync-bar">
-  <div class="sync-dot" id="syncDot"></div>
-  <span id="syncText">Verbinden...</span>
-  <button onclick="pushToGitHub()" id="githubBtn" style="margin-left:auto;padding:3px 10px;background:none;border:1px solid rgba(201,169,110,0.25);border-radius:3px;color:var(--text-muted);font-size:9px;font-family:'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:all 0.2s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">
-    ↑ Push naar GitHub
-  </button>
+  <div class="sync-dot syncing" id="syncDot"></div>
+  <span id="syncText">Pushen naar GitHub…</span>
+  <button onclick="pushToGitHub()" id="githubBtn" style="margin-left: auto; padding: 3px 10px; background: none; border: 1px solid rgba(201, 169, 110, 0.25); border-radius: 3px; color: var(--text-muted); font-size: 9px; font-family: Montserrat, sans-serif; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'" disabled="">⏳ Bezig…</button>
 </div>
 
 <div class="container">
@@ -581,7 +578,7 @@
       <div class="table-title">Actieve Kelder</div>
       <input type="text" placeholder="Zoeken…" id="searchInput" oninput="renderWines()" style="width:160px;padding:8px 12px;font-size:11px">
     </div>
-    <div class="filter-bar" id="filterBar"></div>
+    <div class="filter-bar" id="filterBar"><button class="filter-btn active" onclick="setFilter('all')">Alle</button><button class="filter-btn " onclick="setFilter('Italië')">Italië</button><button class="filter-btn " onclick="setFilter('Spanje')">Spanje</button><button class="filter-btn " onclick="setFilter('Zuid-Italië')">Zuid-Italië</button><button class="filter-btn " onclick="setFilter('Frankrijk')">Frankrijk</button></div>
     <div class="col-header">
       <span>Wijn</span>
       <span class="col-center">Jaargang</span>
@@ -590,8 +587,110 @@
       <span class="col-center">Drinkvenster</span>
     </div>
     <div class="wine-list" id="wineList">
-      <div class="loading"><div class="spinner"></div> Kelder laden…</div>
+    <div class="wine-row" onclick="openModal(4)">
+      <div>
+        <div class="wine-name">Bufalo Nero Governo</div>
+        <div class="wine-meta">Sangiovese blend · Toscane IGT</div>
+      </div>
+      <div class="wine-vintage">2023</div>
+      <div class="wine-bottles">
+        <div class="bottle-count">5</div>
+        <div class="bottle-label">fl.</div>
+      </div>
+      <div class="wine-score"><div class="score-empty">—</div></div>
+      <div class="drink-window ready">Nu – 2028</div>
     </div>
+    <div class="wine-row" onclick="openModal(7)">
+      <div>
+        <div class="wine-name">Casa Vinicola Bennati Amarone della Valpolicella</div>
+        <div class="wine-meta">Corvina, Rondinella, Molinara · Amarone della Valpolicella DOCG</div>
+      </div>
+      <div class="wine-vintage">2021</div>
+      <div class="wine-bottles">
+        <div class="bottle-count">6</div>
+        <div class="bottle-label">fl.</div>
+      </div>
+      <div class="wine-score"><div class="score-empty">—</div></div>
+      <div class="drink-window wait">Vanaf 2028</div>
+    </div>
+    <div class="wine-row" onclick="openModal(1)">
+      <div>
+        <div class="wine-name">Don Carón Gran Reserva</div>
+        <div class="wine-meta">Cariñena/Mazuelo · Cariñena</div>
+      </div>
+      <div class="wine-vintage">2018</div>
+      <div class="wine-bottles">
+        <div class="bottle-count">2</div>
+        <div class="bottle-label">fl.</div>
+      </div>
+      <div class="wine-score"><div class="score-empty">—</div></div>
+      <div class="drink-window ready">Nu – 2029</div>
+    </div>
+    <div class="wine-row" onclick="openModal(5)">
+      <div>
+        <div class="wine-name">Gran Sasso Tre Autoctoni</div>
+        <div class="wine-meta">Autochtone blend · NV blend Puglia/Sicilië/Abruzzo</div>
+      </div>
+      <div class="wine-vintage">N.V.</div>
+      <div class="wine-bottles">
+        <div class="bottle-count">6</div>
+        <div class="bottle-label">fl.</div>
+      </div>
+      <div class="wine-score"><div class="score-value">7</div></div>
+      <div class="drink-window ready">Nu – 2027</div>
+    </div>
+    <div class="wine-row" onclick="openModal(2)">
+      <div>
+        <div class="wine-name">Les Mémoires d'Excellence Cévennes</div>
+        <div class="wine-meta">Blend Zuid-Frans · Cévennes IGP</div>
+      </div>
+      <div class="wine-vintage">2023</div>
+      <div class="wine-bottles">
+        <div class="bottle-count">2</div>
+        <div class="bottle-label">fl.</div>
+      </div>
+      <div class="wine-score"><div class="score-empty">—</div></div>
+      <div class="drink-window ready">Nu – 2027</div>
+    </div>
+    <div class="wine-row" onclick="openModal(3)">
+      <div>
+        <div class="wine-name">Mastieri Primitivo</div>
+        <div class="wine-meta">Primitivo · Puglia IGT</div>
+      </div>
+      <div class="wine-vintage">2024</div>
+      <div class="wine-bottles">
+        <div class="bottle-count">2</div>
+        <div class="bottle-label">fl.</div>
+      </div>
+      <div class="wine-score"><div class="score-value">7.5</div></div>
+      <div class="drink-window ready">Nu – 2028</div>
+    </div>
+    <div class="wine-row" onclick="openModal(8)">
+      <div>
+        <div class="wine-name">Poggio di Sotto Brunello di Montalcino</div>
+        <div class="wine-meta">Sangiovese Grosso · Brunello di Montalcino DOCG</div>
+      </div>
+      <div class="wine-vintage">2021</div>
+      <div class="wine-bottles">
+        <div class="bottle-count">1</div>
+        <div class="bottle-label">fl.</div>
+      </div>
+      <div class="wine-score"><div class="score-empty">—</div></div>
+      <div class="drink-window wait">Vanaf 2033</div>
+    </div>
+    <div class="wine-row" onclick="openModal(6)">
+      <div>
+        <div class="wine-name">Ritardatario Primitivo di Manduria</div>
+        <div class="wine-meta">Primitivo · Primitivo di Manduria DOC</div>
+      </div>
+      <div class="wine-vintage">2022</div>
+      <div class="wine-bottles">
+        <div class="bottle-count">4</div>
+        <div class="bottle-label">fl.</div>
+      </div>
+      <div class="wine-score"><div class="score-empty">—</div></div>
+      <div class="drink-window ready">Nu – 2030</div>
+    </div></div>
   </div>
 
   <!-- ADD TAB -->
@@ -746,20 +845,20 @@
 <!-- BOTTOM NAV (mobile) -->
 <nav class="bottom-nav">
   <button class="nav-btn active" id="nav-cellar" onclick="showTab('cellar',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6h18M3 12h18M3 18h18"></path></svg>
     Kelder
   </button>
   <button class="nav-btn" id="nav-add" onclick="showTab('add',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v8M8 12h8"></path></svg>
     Toevoegen
   </button>
   <div style="flex:1"></div><!-- space for FAB -->
   <button class="nav-btn" id="nav-dashboard" onclick="showTab('dashboard',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>
     Stats
   </button>
   <button class="nav-btn" id="nav-drunk" onclick="showTab('drunk',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 3h6l1 9H8L9 3zM8 12c0 3 1 6 4 8s4-5 4-8"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 3h6l1 9H8L9 3zM8 12c0 3 1 6 4 8s4-5 4-8"></path></svg>
     Gedronken
   </button>
 </nav>
@@ -767,8 +866,8 @@
 <!-- SCAN FAB -->
 <div class="scan-fab" onclick="openScan()" title="Fles scannen">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-    <circle cx="12" cy="13" r="4"/>
+    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+    <circle cx="12" cy="13" r="4"></circle>
   </svg>
 </div>
 
@@ -793,7 +892,7 @@
   </div>
   <div class="scan-preview-wrap">
     <div class="scan-placeholder" id="scanPlaceholder">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
       <span>Maak een foto van het wijnlabel</span>
     </div>
     <img id="scanPreview" alt="scan preview">
@@ -1677,5 +1776,6 @@ if ('serviceWorker' in navigator) {
 // ═══════════════════════════════════════════════════════
 init();
 </script>
-</body>
-</html>
+
+
+</body></html>
